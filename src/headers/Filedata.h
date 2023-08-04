@@ -14,8 +14,7 @@ class Filedata {
     std::shared_ptr<char []> m_fileData;
     size_t m_len=0;
 public:
-    Filedata();
-     Filedata(const std::string &fileName);
+    explicit Filedata(const std::string &fileName);
     ~Filedata();
 
     char *getFileData() const;

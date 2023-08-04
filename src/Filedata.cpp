@@ -43,6 +43,3 @@ size_t Filedata::getFileLen() const {
 std::shared_ptr<char[]> Filedata::getSharedPtrFileData() const {
     return m_fileData;
 }
-
-Filedata::Filedata() {
-}
