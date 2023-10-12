@@ -1,4 +1,4 @@
-# Install script for directory: /home/cs18/Desktop/c++_study/07-project_webserver
+# Install script for directory: /home/cs18/Desktop/c++_study/00-project_webserve_main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/cs18/Desktop/c++_study/07-project_webserver/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/cs18/Desktop/c++_study/00-project_webserve_main/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

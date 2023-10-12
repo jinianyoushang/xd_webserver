@@ -73,6 +73,13 @@ Requests: 345806 susceed, 0 failed.
 Speed=3810942 pages/min, 45921848 bytes/sec.
 Requests: 635157 susceed, 0 failed.
 
+##### 真正无锁队列+缓存  1主线程 线程池2个消费者
+
+Speed=3953652 pages/min, 47641576 bytes/sec.
+Requests: 658942 susceed, 0 failed.
+
+性能瓶颈可能在主线程上
+
 #### Jmeter
 
 Jmeter测试达到了nginx的水平

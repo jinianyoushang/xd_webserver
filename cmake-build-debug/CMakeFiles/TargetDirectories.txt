@@ -1,5 +1,5 @@
-/home/cs18/Desktop/c++_study/07-project_webserver/cmake-build-debug/CMakeFiles/webserver.dir
-/home/cs18/Desktop/c++_study/07-project_webserver/cmake-build-debug/CMakeFiles/test_simp_ini.dir
-/home/cs18/Desktop/c++_study/07-project_webserver/cmake-build-debug/CMakeFiles/testFileCache.dir
-/home/cs18/Desktop/c++_study/07-project_webserver/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/cs18/Desktop/c++_study/07-project_webserver/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/cs18/Desktop/c++_study/00-project_webserve_main/cmake-build-debug/CMakeFiles/webserver.dir
+/home/cs18/Desktop/c++_study/00-project_webserve_main/cmake-build-debug/CMakeFiles/test_simp_ini.dir
+/home/cs18/Desktop/c++_study/00-project_webserve_main/cmake-build-debug/CMakeFiles/testFileCache.dir
+/home/cs18/Desktop/c++_study/00-project_webserve_main/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/cs18/Desktop/c++_study/00-project_webserve_main/cmake-build-debug/CMakeFiles/rebuild_cache.dir

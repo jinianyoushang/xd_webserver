@@ -11,7 +11,7 @@
 #include <list>
 #include <iostream>
 #include <string>
-#include "blockingconcurrentqueue.h"
+#include_next "concurrentqueue.h"
 
 //线程池类，定义成模板类是为了代码的复用，模板参数T是任务类
 //目前是单生产者多消费者
@@ -25,12 +25,15 @@ private:
     //请求队列中最多允许的，等待处理的请求数量
     int m_max_requests;
     //请求队列  修改为无锁队列
-    moodycamel::BlockingConcurrentQueue<T *> m_workqueue;
+//    moodycamel::BlockingConcurrentQueue<T *> m_workqueue; //有锁队列
+    moodycamel::ConcurrentQueue<T *> m_workqueue;
     //是否结束线程
     bool m_stop{false};
 
     static void *worker(void *arg);
+
     void run();
+
 public:
     explicit Threadpool(int mThreadNumber = 8, int mMaxRequests = 10000);
 
@@ -42,11 +45,14 @@ public:
 
 template<typename T>
 void Threadpool<T>::run() {
-    while(!m_stop){
+    while (!m_stop) {
         T *request;
-        m_workqueue.wait_dequeue(request);//使用无锁队列
+        //使用无锁队列
+        while (!m_workqueue.try_dequeue(request)) {
+            sched_yield();//让出时间片
+        }
         //开始处理任务
-        if(!request){
+        if (!request) {
             continue;
         }
         request->process();//每个任务都要定义process
@@ -79,14 +85,14 @@ Threadpool<T>::~Threadpool() {
 
 template<typename T>
 void *Threadpool<T>::worker(void *arg) {
-    auto pool=static_cast<Threadpool*>(arg);
+    auto pool = static_cast<Threadpool *>(arg);
     pool->run();
     return pool;
 }
 
 template<typename T>
 bool Threadpool<T>::append(T *request) {
-    if(m_workqueue.size_approx()>m_max_requests){
+    if (m_workqueue.size_approx() > m_max_requests) {
         return false;
     }
 //    printf("queue size(): %d\n",m_workqueue.size_approx());
