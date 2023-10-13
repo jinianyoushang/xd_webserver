@@ -61,13 +61,21 @@ void cb_func(HttpConnection *user_data) {
 }
 
 int main(int argc, char *argv[]) {
+#ifdef NDEBUG
+    // 非 Debug 模式下的代码
+    cout<< "非 Debug 模式"<<endl;
+#else
+    // Debug 模式下的代码
+    cout << "Debug 模式" << endl;
+#endif
+
     //初始化配置文件
-    std::cout<<"doc_root "<<Config::getInstance().doc_root.c_str()<<std::endl;
-    int port=0;
+    std::cout << "doc_root " << Config::getInstance().doc_root.c_str() << std::endl;
+    int port = 0;
     if (argc <= 1) {
         printf("可按照如下格式运行：%s port_number\n", basename(argv[0]));
         port = Config::getInstance().PORT;
-    }else{
+    } else {
         port = atoi(argv[1]);
     }
     cout << "获得绑定的端口：" << port << endl;

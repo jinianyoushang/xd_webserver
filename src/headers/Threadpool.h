@@ -95,7 +95,17 @@ bool Threadpool<T>::append(T *request) {
     if (m_workqueue.size_approx() > m_max_requests) {
         return false;
     }
-//    printf("queue size(): %d\n",m_workqueue.size_approx());
+
+#ifndef NDEBUG
+    //如果在debug模式
+    //判断队列大小从而确定是生产者瓶颈还是消费者瓶颈
+    static long long times = 0;
+    times++;
+    if (times % 5000 == 0) {
+        printf("queue size(): %d  times: %d\n", m_workqueue.size_approx(), times);
+    }
+#endif
+
     m_workqueue.enqueue(request);
     return true;
 }

@@ -4,6 +4,16 @@ project(webserver)
 set(CMAKE_CXX_STANDARD 17)
 #add_compile_options(-O3)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("Debug mode is enabled.")
+    # 在 Debug 模式下执行特定操作
+
+else ()
+    message("Debug mode is not enabled.")
+    # 在非 Debug 模式下执行其他操作
+endif ()
+
+
 include_directories(src/
         src/headers
         ext/simpleini-4.19
