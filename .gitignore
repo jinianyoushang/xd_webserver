@@ -1,0 +1,6 @@
+
+.idea/.name
+.idea/vcs.xml
+cmake-build-debug/
+cmake-build-release/
+.idea/
