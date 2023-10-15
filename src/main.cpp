@@ -32,8 +32,8 @@ void addSignal(int sig, void (handler)(int)) {
     sa.sa_handler = handler;
     sa.sa_flags |= SA_RESTART;
     sigfillset(&sa.sa_mask);
-    int res=sigaction(sig, &sa, nullptr);
-    if(res==-1){
+    int res = sigaction(sig, &sa, nullptr);
+    if (res == -1) {
         perror("sigaction");
         exit(-1);
     }
@@ -87,9 +87,9 @@ int main(int argc, char *argv[]) {
     bool stop_server = false; //停止服务的运行
 
     //初始化线程池
-    unique_ptr<Threadpool<HttpConnection>> pool;
+    unique_ptr<ThreadPool> pool;
     try {
-        pool = make_unique<Threadpool<HttpConnection>>(Config::getInstance().THREAD_NUMBER);
+        pool = make_unique<ThreadPool>(Config::getInstance().THREAD_NUMBER);
     } catch (...) {
         cout << "初始化线程池失败" << endl;
         exit(-1);
@@ -192,39 +192,40 @@ int main(int argc, char *argv[]) {
                 //对方(异常)断开或者错误事件发生
 //                printf("对方断开或者错误事件发生\n");
                 users[sockfd].close_conn();
-            }else if(sockfd == pipefd[0]  &&(events[i].events & EPOLLIN)){ // 处理信号
+            } else if (sockfd == pipefd[0] && (events[i].events & EPOLLIN)) { // 处理信号
                 char signals[1024];
-                ret=recv(pipefd[0],signals,sizeof (signals),0);
-                if(ret==-1){
+                ret = recv(pipefd[0], signals, sizeof(signals), 0);
+                if (ret == -1) {
                     continue;
-                }else if(ret==0){
+                } else if (ret == 0) {
                     continue;
-                }else{
+                } else {
                     for (int j = 0; j < ret; ++j) {
                         switch (signals[j]) {
-                            case SIGALRM:
-                            {
+                            case SIGALRM: {
                                 // 用timeout变量标记有定时任务需要处理，但不立即处理定时任务
                                 // 这是因为定时任务的优先级不是很高，我们优先处理其他更重要的任务。
                                 timeout = true;
                                 break;
                             }
-                            case SIGTERM:
-                            {
+                            case SIGTERM: {
                                 printf("SIGTERM  stop_server\n");
                                 stop_server = true;
                             }
-                            default:{
+                            default: {
                                 printf("未处理的情况\n");
                                 exit(-1);
                             }
                         }
                     }
                 }
-            }else if (events[i].events & EPOLLIN) {//检测读事件
+            } else if (events[i].events & EPOLLIN) {//检测读事件
                 if (users[sockfd].read()) {
                     //一次性读取数据
-                    pool->append(&users[sockfd]);//多线程处理数据
+                    auto func = [&]() {
+                        users[sockfd].process();
+                    };
+                    pool->submit(func);//多线程处理数据
                 } else {
 //                    printf("read断开连接\n");
                     users[sockfd].close_conn(true);
@@ -237,7 +238,7 @@ int main(int argc, char *argv[]) {
             }
         }
         // 最后处理定时事件，因为I/O事件有更高的优先级。当然，这样做将导致定时任务不能精准的按照预定的时间执行。
-        if( timeout ) {
+        if (timeout) {
             timer_handler();
             timeout = false;
         }
@@ -245,7 +246,7 @@ int main(int argc, char *argv[]) {
 
     close(epollfd);
     close(listenfd);
-    close( pipefd[1] );
-    close( pipefd[0] );
+    close(pipefd[1]);
+    close(pipefd[0]);
     return 0;
 }
