@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
 
     //创建epoll对象，事件数组，添加
     epoll_event events[Config::getInstance().MAX_EVENT_NUMBER];
-    int epollfd = epoll_create(10);
+    int epollfd = epoll_create(10); //这里大于0就可以，这个数已经被废弃
     //添加到epoll对象中
     addfd(epollfd, listenfd, false);
     cout << "epollfd:" << epollfd << endl;
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
                 timer_lst.add_timer(timer);
             } else if (events[i].events & (EPOLLRDHUP | EPOLLHUP | EPOLLERR)) {
                 //对方(异常)断开或者错误事件发生
-//                printf("对方断开或者错误事件发生\n");
+                printf("对方断开或者错误事件发生\n");
                 users[sockfd].close_conn();
             }else if(sockfd == pipefd[0]  &&(events[i].events & EPOLLIN)){ // 处理信号
                 char signals[1024];

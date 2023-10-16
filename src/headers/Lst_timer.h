@@ -13,7 +13,7 @@
 // 定时器类
 class util_timer {
 public:
-    util_timer() : prev(NULL), next(NULL) {}
+    util_timer() : prev(nullptr), next(nullptr) {}
 
 public:
     time_t expire{};   // 任务超时时间，这里使用绝对时间
